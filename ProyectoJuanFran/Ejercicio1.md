@@ -4,12 +4,14 @@ Es una buena práctica actualizar los paquetes antes de comenzar la instalación
 sudo apt update
 sudo apt upgrade
 
+![image](https://github.com/user-attachments/assets/9e6c2faa-45b8-40ca-bd2c-f8817f419a07)
+
 2. Instalar Apache
 Para instalar Apache, usa el siguiente comando:
 
 sudo apt install apache2
 
-->
+![image](https://github.com/user-attachments/assets/e20817cb-94f7-41ee-9a4d-d957a22b6266)
 
 Este comando instalará el paquete apache2 y todas sus dependencias.
 
@@ -19,13 +21,14 @@ Una vez instalado, puedes iniciar el servicio de Apache y habilitarlo para que s
 sudo systemctl start apache2
 sudo systemctl enable apache2
 
--> 
+ ![image](https://github.com/user-attachments/assets/22624292-9da9-42d9-9d84-be35f0a24dd0)
+
 4. Comprobar el estado del servicio
 Verifica que Apache esté corriendo correctamente con:
 
 sudo systemctl status apache2
 
-->
+![image](https://github.com/user-attachments/assets/86b545f2-f3f6-4adc-a26b-b973658bc2e7)
 
 Si todo está bien, deberías ver algo como "active (running)".
 
@@ -35,14 +38,14 @@ Si tienes un firewall activo (por ejemplo, ufw), necesitas permitir el tráfico 
 sudo ufw allow 'Apache'
 sudo ufw reload
 
-->
+![image](https://github.com/user-attachments/assets/efe9f3a7-f0b5-4dde-a9b6-abbd0eaa5ed1)
 
 6. Verificar la instalación
 Abre un navegador y accede a la dirección IP de tu servidor o a localhost si estás trabajando en una máquina local:
 
 http://localhost/
 
-->
+![image](https://github.com/user-attachments/assets/3b086304-3e0f-4385-bad3-3423137ba56c)
 
 Deberías ver la página predeterminada de Apache, que indica que el servidor web está funcionando correctamente.
 
