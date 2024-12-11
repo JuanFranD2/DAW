@@ -122,7 +122,7 @@ Contenido del archivo apache:
 
   ![image](https://github.com/user-attachments/assets/22a80e9b-170b-45cd-91fb-b18678cb93d9)
 
-- Habilitar el sitio:
+- Habilito el sitio:
   sudo a2ensite     
   departamentos.centro.intranet.conf
   sudo systemctl reload apache2
@@ -130,13 +130,13 @@ Contenido del archivo apache:
   ![image](https://github.com/user-attachments/assets/40b83851-4b51-4145-9dcb-68c4aa5c6f95)
 
 -- Protección de la aplicación Python con autenticación
-- Habilitar autenticación básica:
+- Habilito autenticación básica:
 sudo apt install apache2-utils -y
 sudo htpasswd -c /etc/apache2/.htpasswd user1
 
 ![image](https://github.com/user-attachments/assets/5e13aede-1dc3-4be5-a549-9166dc611ab5)
 
-- Modificar la configuración del VirtualHost:
+- Modifico la configuración del VirtualHost:
 <Directory /var/www/departamentos>
     Require valid-user
     AuthType Basic
@@ -146,24 +146,24 @@ sudo htpasswd -c /etc/apache2/.htpasswd user1
 
 ![image](https://github.com/user-attachments/assets/2ca7f91d-8a94-4d23-9b7b-5b78047bc2d4)
 
--- Instalar y configurar Awstats
-- Instalar Awstats:
+-- Instalo y configuro Awstats
+- Instalo Awstats:
 sudo apt install awstats -y
 
 ![image](https://github.com/user-attachments/assets/c4c0521d-e272-4072-a3d8-c7a630426137)
 
-- Configurar Awstats:
+- Configuro Awstats:
 sudo nano /etc/awstats/awstats.conf
 
 ![image](https://github.com/user-attachments/assets/38e5bae7-e10c-4ccf-bbb4-e7c39cb57cbb)
 
--- Paso 7: Instalar segundo servidor web
-- Instalar Nginx:
+-- Instalo segundo servidor web
+- Instalo Nginx:
 sudo apt install nginx php-fpm -y
 
 ![image](https://github.com/user-attachments/assets/ab92f134-114b-414c-95f4-b96b094f3c54)
 
-- Configurar Nginx para el dominio:
+- Configuro Nginx para el dominio:
 sudo nano /etc/nginx/sites-available/servidor2.centro.intranet
 - Contenido:
 server {
@@ -182,19 +182,18 @@ server {
 
 ![image](https://github.com/user-attachments/assets/7dea70dc-1ec5-46d6-b382-0b4b39d9a578)
 
-- Crear el directorio raíz:
+- Creo el directorio raíz:
 sudo mkdir /var/www/servidor2
 sudo chown -R www-data:www-data /var/www/servidor2
 
 ![image](https://github.com/user-attachments/assets/0865f1eb-320e-43a3-81de-b195573ae9b3)
 
-- Habilitar configuración en Nginx:
+- Habilito configuración en Nginx:
 sudo ln -s /etc/nginx/sites-available/servidor2.centro.intranet /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
 
 
-- Instalar phpMyAdmin:
-  
+- Instalo phpMyAdmin:
 sudo apt install phpmyadmin -y
 ![image](https://github.com/user-attachments/assets/aa268f69-727f-473d-b04c-8fe13fc6d2bc)
 ![image](https://github.com/user-attachments/assets/faf0eac6-48a9-4cf8-9e50-47197e95bdfd)
