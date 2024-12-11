@@ -1,202 +1,175 @@
--- Instalo el servidor web Apache:
-- Actualizo los paquetes y repositorios:
-sudo apt update && sudo apt upgrade -y
+1. Actualizar el sistema
+Es una buena práctica actualizar los paquetes antes de comenzar la instalación. Abre una terminal y ejecuta el siguiente comando:
 
-![image](https://github.com/user-attachments/assets/f1970258-9c8e-4e69-a8bc-7e32d7aa590d)
+bash
+Copiar código
+sudo apt update
+sudo apt upgrade
+2. Instalar Apache
+Para instalar Apache, usa el siguiente comando:
 
-- Instalo Apache:
-sudo apt install apache2 -y
+bash
+Copiar código
+sudo apt install apache2
+Este comando instalará el paquete apache2 y todas sus dependencias.
 
-![image](https://github.com/user-attachments/assets/b0a42599-7a04-44d2-a5e3-85d62c6f75df)
+3. Iniciar y habilitar Apache
+Una vez instalado, puedes iniciar el servicio de Apache y habilitarlo para que se inicie automáticamente al arrancar el sistema:
 
-- Edito el archivo hosts para incluir los dominios:
+bash
+Copiar código
+sudo systemctl start apache2
+sudo systemctl enable apache2
+4. Comprobar el estado del servicio
+Verifica que Apache esté corriendo correctamente con:
+
+bash
+Copiar código
+sudo systemctl status apache2
+Si todo está bien, deberías ver algo como "active (running)".
+
+5. Abrir el puerto 80 (si tienes un firewall habilitado)
+Si tienes un firewall activo (por ejemplo, ufw), necesitas permitir el tráfico en el puerto 80 (HTTP):
+
+bash
+Copiar código
+sudo ufw allow 'Apache'
+sudo ufw reload
+Si usas ufw, puedes verificar que el tráfico HTTP esté permitido con:
+
+bash
+Copiar código
+sudo ufw status
+6. Verificar la instalación
+Abre un navegador y accede a la dirección IP de tu servidor o a localhost si estás trabajando en una máquina local:
+
+arduino
+Copiar código
+http://localhost/
+Deberías ver la página predeterminada de Apache, que indica que el servidor web está funcionando correctamente.
+
+---------------------------------------------
+
+Para configurar ambos dominios en tu máquina utilizando el archivo hosts, sigue estos pasos:
+
+1. Editar el archivo hosts
+Primero, necesitas mapear ambos dominios a tu IP local (si estás trabajando en un entorno local). Para hacerlo, edita el archivo hosts:
+
+bash
+Copiar código
 sudo nano /etc/hosts
-- Añado las siguientes líneas:
+Agrega las siguientes líneas al final del archivo (suponiendo que el servidor sea local, puedes usar 127.0.0.1):
+
+Copiar código
 127.0.0.1   centro.intranet
 127.0.0.1   departamentos.centro.intranet
+Guarda y cierra el archivo.
 
-  ![image](https://github.com/user-attachments/assets/c90280cf-a51b-454a-a1ab-8f1d5900ae92)
+2. Configurar Apache para ambos dominios
+Apache debe estar configurado para servir diferentes sitios según el dominio solicitado. Para hacerlo, vamos a crear dos archivos de configuración de sitios virtuales: uno para WordPress (en centro.intranet) y otro para la aplicación en Python (en departamentos.centro.intranet).
 
-- Reinicio Apache:
-sudo systemctl restart apache2
+a) Configurar el sitio para WordPress
+Crear el directorio para WordPress:
 
-![image](https://github.com/user-attachments/assets/9625ee4f-53ee-49b0-9c25-0964e2ca9ef2)
+bash
+Copiar código
+sudo mkdir -p /var/www/centro.intranet
+Descargar e instalar WordPress (si no lo has hecho ya):
 
--- Activo los módulos para PHP y acceso a MySQL
-
-- Instalo PHP y módulos necesarios
-  sudo apt install php libapache2-mod-php php-   mysql -y
-
-  ![image](https://github.com/user-attachments/assets/98a54333-7f0d-4ca1-a9f8-7f86d6aeb53a)
-
-  
-- Habilito el módulo PHP en Apache:
-  sudo a2enmod php
-  sudo systemctl restart apache2
-
-  ![image](https://github.com/user-attachments/assets/32238020-60ec-4034-9be2-9f2ab60e7af3)
-
--- Instalo y configuro WordPress
-- Instalo MySQL y configuro la base de datos:
-sudo apt install mysql-server -y
-sudo mysql_secure_installation
-
-![image](https://github.com/user-attachments/assets/96e5acd8-3f1e-43e3-8fab-62220b1289c9)
-
-
-- Luego, crearé una base de datos para WordPress:
-sudo mysql -u root -p
-CREATE DATABASE wordpress;
-CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-
-![image](https://github.com/user-attachments/assets/07d208ac-5bb5-4079-a279-6f16d50d1abf)
-
-
-- Descargo y configuro WordPress:
+bash
+Copiar código
+cd /var/www/centro.intranet
 wget https://wordpress.org/latest.tar.gz
-tar -xzvf latest.tar.gz
-sudo mv wordpress /var/www/centro.intranet
+tar -xvzf latest.tar.gz
 sudo chown -R www-data:www-data /var/www/centro.intranet
-sudo chmod -R 755 /var/www/centro.intranet
+Crear el archivo de configuración para Apache:
 
-![image](https://github.com/user-attachments/assets/7a7ccd63-6bcd-4c1e-b86b-4c35e822567a)
-
-- Configuro un VirtualHost para WordPress:
+bash
+Copiar código
 sudo nano /etc/apache2/sites-available/centro.intranet.conf
+Agrega lo siguiente en el archivo:
 
-Contenido del archivo apache:
+apache
+Copiar código
 <VirtualHost *:80>
+    ServerAdmin webmaster@centro.intranet
     ServerName centro.intranet
-    DocumentRoot /var/www/centro.intranet
-    <Directory /var/www/centro.intranet>
+    DocumentRoot /var/www/centro.intranet/wordpress
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    <Directory /var/www/centro.intranet/wordpress>
         AllowOverride All
     </Directory>
 </VirtualHost>
-- Habilito el sitio:
+Habilitar el sitio:
+
+bash
+Copiar código
 sudo a2ensite centro.intranet.conf
 sudo systemctl reload apache2
+b) Configurar el sitio para la aplicación Python
+Crear el directorio para la aplicación:
 
-![image](https://github.com/user-attachments/assets/c9d39ba5-5fb3-40cd-8fa0-c4554d7030b3)
+bash
+Copiar código
+sudo mkdir -p /var/www/departamentos.centro.intranet
+Configurar un VirtualHost para servir la aplicación Python. Supongamos que tienes una aplicación Python corriendo con Flask o Django, por ejemplo.
 
-- Habilito el sitio:
-  sudo a2ensite centro.intranet.conf
-  sudo systemctl reload apache2
+Si usas Flask o un servidor WSGI, necesitarás configurar Apache con mod_wsgi. Vamos a suponer que tu aplicación se ejecuta con Flask:
 
-  ![image](https://github.com/user-attachments/assets/18a7f590-e479-448c-9cf8-20e4edbb6688)
+Instalar mod_wsgi:
 
--- Activo módulo wsgi para Python
-- Instalo el módulo mod_wsgi:
-sudo apt install libapache2-mod-wsgi-py3 -y
-sudo a2enmod wsgi
-sudo systemctl restart apache2
+bash
+Copiar código
+sudo apt install libapache2-mod-wsgi-py3
+Crear el archivo de configuración de Apache para la aplicación Python:
 
-![image](https://github.com/user-attachments/assets/28ff999b-2522-41e8-857e-6969557dfaa7)
-
-- Creo y despliego una aplicación Python: Creo una carpeta para la aplicación:
-sudo mkdir /var/www/departamentos
-sudo nano /var/www/departamentos/app.wsgi
-Contenido del archivo python:
-def application(environ, start_response):
-    status = '200 OK'
-    output = b'Hello, Python application is running!'
-    response_headers = [('Content-type', 'text/plain'),
-                        ('Content-Length', str(len(output)))]
-    start_response(status, response_headers)
-    return [output]
-
-![image](https://github.com/user-attachments/assets/09fac413-f183-4ad5-ae41-3fb885cf1a77)
-
-- Configuro el VirtualHost para Python:
+bash
+Copiar código
 sudo nano /etc/apache2/sites-available/departamentos.centro.intranet.conf
-Contenido del archivo apache:
+Agrega lo siguiente:
+
+apache
+Copiar código
 <VirtualHost *:80>
+    ServerAdmin webmaster@departamentos.centro.intranet
     ServerName departamentos.centro.intranet
-    WSGIScriptAlias / /var/www/departamentos/app.wsgi
-    <Directory /var/www/departamentos>
+    DocumentRoot /var/www/departamentos.centro.intranet
+
+    WSGIDaemonProcess app user=www-data group=www-data threads=5
+    WSGIScriptAlias / /var/www/departamentos.centro.intranet/app.wsgi
+
+    <Directory /var/www/departamentos.centro.intranet>
+        WSGIProcessGroup app
+        WSGIApplicationGroup %{GLOBAL}
         Require all granted
     </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
+Asegúrate de que el archivo .wsgi apunte correctamente a tu aplicación Python.
 
-  ![image](https://github.com/user-attachments/assets/22a80e9b-170b-45cd-91fb-b18678cb93d9)
+Habilitar el sitio:
 
-- Habilito el sitio:
-  sudo a2ensite     
-  departamentos.centro.intranet.conf
-  sudo systemctl reload apache2
+bash
+Copiar código
+sudo a2ensite departamentos.centro.intranet.conf
+sudo systemctl reload apache2
+3. Probar la configuración
+Ahora deberías poder acceder a ambos sitios desde tu navegador:
 
-  ![image](https://github.com/user-attachments/assets/40b83851-4b51-4145-9dcb-68c4aa5c6f95)
+http://centro.intranet debería mostrar la página de WordPress.
+http://departamentos.centro.intranet debería servir tu aplicación Python.
+4. Asegurarte de que Apache está funcionando correctamente
+Finalmente, puedes verificar el estado de Apache para asegurarte de que todo esté en orden:
 
--- Protección de la aplicación Python con autenticación
-- Habilito autenticación básica:
-sudo apt install apache2-utils -y
-sudo htpasswd -c /etc/apache2/.htpasswd user1
+sudo systemctl status apache2
 
-![image](https://github.com/user-attachments/assets/5e13aede-1dc3-4be5-a549-9166dc611ab5)
+Y si necesitas reiniciar Apache después de hacer cambios:
 
-- Modifico la configuración del VirtualHost:
-<Directory /var/www/departamentos>
-    Require valid-user
-    AuthType Basic
-    AuthName "Restricted Access"
-    AuthUserFile /etc/apache2/.htpasswd
-</Directory>
+sudo systemctl restart apache2
 
-![image](https://github.com/user-attachments/assets/2ca7f91d-8a94-4d23-9b7b-5b78047bc2d4)
-
--- Instalo y configuro Awstats
-- Instalo Awstats:
-sudo apt install awstats -y
-
-![image](https://github.com/user-attachments/assets/c4c0521d-e272-4072-a3d8-c7a630426137)
-
-- Configuro Awstats:
-sudo nano /etc/awstats/awstats.conf
-
-![image](https://github.com/user-attachments/assets/38e5bae7-e10c-4ccf-bbb4-e7c39cb57cbb)
-
--- Instalo segundo servidor web
-- Instalo Nginx:
-sudo apt install nginx php-fpm -y
-
-![image](https://github.com/user-attachments/assets/ab92f134-114b-414c-95f4-b96b094f3c54)
-
-- Configuro Nginx para el dominio:
-sudo nano /etc/nginx/sites-available/servidor2.centro.intranet
-- Contenido:
-server {
-    listen 8080;
-    server_name servidor2.centro.intranet;
-    root /var/www/servidor2;
-
-    index index.php index.html;
-
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php-fpm.sock;
-    }
-
-}
-
-![image](https://github.com/user-attachments/assets/7dea70dc-1ec5-46d6-b382-0b4b39d9a578)
-
-- Creo el directorio raíz:
-sudo mkdir /var/www/servidor2
-sudo chown -R www-data:www-data /var/www/servidor2
-
-![image](https://github.com/user-attachments/assets/0865f1eb-320e-43a3-81de-b195573ae9b3)
-
-- Habilito configuración en Nginx:
-sudo ln -s /etc/nginx/sites-available/servidor2.centro.intranet /etc/nginx/sites-enabled/
-sudo systemctl restart nginx
-
-
-- Instalo phpMyAdmin:
-sudo apt install phpmyadmin -y
-![image](https://github.com/user-attachments/assets/aa268f69-727f-473d-b04c-8fe13fc6d2bc)
-![image](https://github.com/user-attachments/assets/faf0eac6-48a9-4cf8-9e50-47197e95bdfd)
-
-
-
+->
