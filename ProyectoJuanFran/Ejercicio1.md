@@ -1,112 +1,128 @@
+-- Paso 1: Configuración inicial del servidor
+Actualiza los paquetes del sistema:
 
-En Ubuntu, puedes instalar y configurar WordPress siguiendo estos pasos:
+sudo apt update && sudo apt upgrade -y
 
--- Paso 1: Configurar el servidor
-Instalar LAMP (Linux, Apache, MySQL/MariaDB, PHP): Ejecuta los siguientes comandos para instalar los componentes necesarios:
 
-sudo apt update
-sudo apt install apache2
-sudo apt install mysql-server
-sudo apt install php libapache2-mod-php php-mysql php-cli php-curl php-gd php-xml php-mbstring unzip curl
 
-![image](https://github.com/user-attachments/assets/ab42caa8-a735-4d6f-a858-5d40950532b1)
+Instala un editor de texto (opcional):
 
-Configurar Apache: Habilita el módulo rewrite y reinicia Apache:
+sudo apt install nano
 
+
+
+Asegúrate de que tienes un dominio local (centro.intranet): Modifica el archivo /etc/hosts en tu máquina local o red para resolver centro.intranet al servidor.
+
+sudo nano /etc/hosts
+
+
+
+Agrega la siguiente línea:
+
+Copiar código
+127.0.0.1 centro.intranet
+
+
+
+-- Paso 2: Instalar y configurar el servidor web
+Instalar un servidor LAMP (Linux, Apache, MySQL, PHP):
+
+sudo apt install apache2 mysql-server php libapache2-mod-php php-mysql -y
+Configurar Apache: Crea un archivo de configuración para el dominio centro.intranet:
+
+sudo nano /etc/apache2/sites-available/centro.intranet.conf
+Contenido del archivo:
+
+<VirtualHost *:80>
+    ServerName centro.intranet
+    DocumentRoot /var/www/centro.intranet
+
+    <Directory /var/www/centro.intranet>
+        AllowOverride All
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/centro.intranet_error.log
+    CustomLog ${APACHE_LOG_DIR}/centro.intranet_access.log combined
+</VirtualHost>
+
+
+
+Habilitar el sitio y mod_rewrite:
+
+sudo a2ensite centro.intranet.conf
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 
-![image](https://github.com/user-attachments/assets/88a19a3a-2f04-4d7f-a507-f8a5b6f11c3d)
 
--- Paso 2: Configurar la base de datos
-Acceder al servidor MySQL:
 
-sudo mysql
+-- Paso 3: Configurar MySQL
+Ejecuta el script de seguridad:
 
-![image](https://github.com/user-attachments/assets/a5593812-f19c-4377-a331-9a681f384fbf)
+sudo mysql_secure_installation
 
-Crear una base de datos para WordPress:
+
+
+Sigue las instrucciones y establece una contraseña segura.
+
+Crea una base de datos y usuario para WordPress: Accede a MySQL:
+
+sudo mysql -u root -p
+
+
+
+Ejecuta los siguientes comandos:
 
 CREATE DATABASE wordpress;
 CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
-Cambia password por una contraseña segura.
 
-![image](https://github.com/user-attachments/assets/223335b9-6c14-4d88-9847-a577905a712d)
 
--- Paso 3: Descargar WordPress
-Ve al directorio raíz del servidor web:
 
-cd /var/www/html
-
-![image](https://github.com/user-attachments/assets/5f694b7f-3c1f-4952-8840-4ee710937681)
-
+-- Paso 4: Instalar WordPress
 Descarga WordPress:
 
-sudo curl -O https://wordpress.org/latest.tar.gz
-
-![image](https://github.com/user-attachments/assets/8f40f697-8afc-40cb-8e16-b646658415b3)
-
-Extrae el archivo:
-
-sudo tar -xzvf latest.tar.gz
-
-![image](https://github.com/user-attachments/assets/84225842-91e3-4610-b45a-9b24ff0eaca8)
-
-Mueve los archivos de WordPress al directorio raíz:
-
-sudo mv wordpress/* .
+wget https://wordpress.org/latest.tar.gz
+tar -xzf latest.tar.gz
+sudo mv wordpress /var/www/centro.intranet
 
 
 
 Configura los permisos:
 
-sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 755 /var/www/html
+sudo chown -R www-data:www-data /var/www/centro.intranet
+sudo chmod -R 755 /var/www/centro.intranet
 
--- Paso 4: Configurar WordPress
-Copia el archivo de configuración de ejemplo:
 
-sudo cp wp-config-sample.php wp-config.php
 
-->
+Copia el archivo de configuración:
 
-Edita el archivo de configuración:
+cd /var/www/centro.intranet
+cp wp-config-sample.php wp-config.php
+Edita wp-config.php:
 
 sudo nano wp-config.php
 
-->
 
-Cambia las siguientes líneas con los detalles de la base de datos:
 
-define('DB_NAME', 'wordpress');
-define('DB_USER', 'wordpressuser');
-define('DB_PASSWORD', 'password');
-define('DB_HOST', 'localhost');
-Guarda y cierra el archivo (Ctrl + O, Enter, Ctrl + X).
+Configura los valores de la base de datos:
 
--- Paso 5: Completar la instalación
-Abre un navegador y accede a tu dominio o IP del servidor:
+define( 'DB_NAME', 'wordpress' );
+define( 'DB_USER', 'wordpressuser' );
+define( 'DB_PASSWORD', 'password' );
+define( 'DB_HOST', 'localhost' );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
 
-plaintext
-Copiar código
-http://tu_dominio_o_ip/
-Sigue las instrucciones del asistente de instalación:
 
-Elige el idioma.
-Configura el nombre del sitio, usuario administrador, contraseña y correo electrónico.
-Haz clic en "Instalar WordPress".
 
--- Paso 6: Ajustes finales
-Acceso al panel de administración: Ve a http://tu_dominio_o_ip/wp-admin/ para iniciar sesión con las credenciales creadas.
+-- Paso 5: Prueba el sitio
+Abre tu navegador y visita:
 
-Opcional: Instalar Certificado SSL (HTTPS): Instala Certbot y configura SSL con Let's Encrypt:
+http://centro.intranet
 
-sudo apt install certbot python3-certbot-apache
-sudo certbot --apache
 
-->
 
-¡Listo! Ahora tienes WordPress instalado y configurado en tu servidor Ubuntu.
+Sigue el asistente de instalación de WordPress para completar la configuración.
+
