@@ -96,51 +96,152 @@ http://localhost
 
 Deberías ver la página predeterminada de Apache con el mensaje "It works!".
 
-5. Configura Virtual Hosts (Opcional)
-Si planeas alojar varios sitios web, puedes configurar virtual hosts. Por ejemplo:
-
-Crea un nuevo archivo de configuración para tu sitio web:
-
-sudo nano /etc/apache2/sites-available/mi-sitio.conf
-
-Añade la configuración básica:
-
-<VirtualHost *:80>
-    ServerName mi-sitio.com
-    ServerAlias www.mi-sitio.com
-    DocumentRoot /var/www/mi-sitio
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-
-Crea el directorio para tu sitio web y configura los permisos:
-
-sudo mkdir /var/www/mi-sitio
-sudo chown -R $USER:$USER /var/www/mi-sitio
-
-
-
-Habilita el nuevo sitio y recarga Apache:
-
-sudo a2ensite mi-sitio
-sudo systemctl reload apache2
-
-
-
-7. Prueba la Configuración
+5. Prueba la Configuración
 Para asegurarte de que Apache está configurado correctamente, ejecuta:
 
 sudo apachectl configtest
 
-
+![image](https://github.com/user-attachments/assets/ba9a58bc-ca66-43a3-85ee-1c4fe1074c0f)
 
 Si todo está bien, deberías ver el mensaje:
 
 Syntax OK
 
-8. Reinicia Apache
+6. Reinicia Apache
 Finalmente, reinicia el servicio para asegurarte de que los cambios están aplicados:
 
 sudo systemctl restart apache2
+
+-- Instalar Wordpress:
+1. Configura el Archivo hosts
+Abre el archivo hosts en tu sistema:
+
+sudo nano /etc/hosts
+
+Añade una línea que apunte el dominio centro.intranet a tu máquina local (127.0.0.1):
+
+127.0.0.1 centro.intranet
+
+
+
+Guarda los cambios (en Nano, usa Ctrl+O para guardar y Ctrl+X para salir).
+
+2. Configura un Virtual Host para centro.intranet
+Crea un archivo de configuración para el sitio web de WordPress en Apache:
+
+sudo nano /etc/apache2/sites-available/centro.intranet.conf
+
+Añade la configuración básica para el dominio:
+
+apache
+Copiar código
+<VirtualHost *:80>
+    ServerName centro.intranet
+    DocumentRoot /var/www/centro.intranet
+
+    <Directory /var/www/centro.intranet>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/centro_error.log
+    CustomLog ${APACHE_LOG_DIR}/centro_access.log combined
+</VirtualHost>
+
+
+
+Guarda y cierra el archivo.
+
+3. Habilita el Nuevo Virtual Host
+Habilita el nuevo sitio:
+
+sudo a2ensite centro.intranet.conf
+
+
+
+Deshabilita el sitio por defecto si no lo necesitas:
+
+sudo a2dissite 000-default.conf
+
+
+
+Habilita el módulo rewrite necesario para WordPress:
+
+sudo a2enmod rewrite
+
+
+
+Recarga Apache para aplicar los cambios:
+
+sudo systemctl reload apache2
+
+
+
+4. Crea el Directorio para centro.intranet
+Crea el directorio donde se alojará WordPress:
+
+sudo mkdir -p /var/www/centro.intranet
+
+
+
+Establece los permisos para que tu usuario pueda administrar los archivos:
+
+sudo chown -R $USER:$USER /var/www/centro.intranet
+sudo chmod -R 755 /var/www/centro.intranet
+
+
+
+5. Descarga e Instala WordPress
+Descarga WordPress:
+
+wget https://wordpress.org/latest.tar.gz
+
+
+
+Extrae el archivo descargado:
+
+tar -xvzf latest.tar.gz
+
+
+
+Mueve los archivos de WordPress al directorio del dominio:
+
+mv wordpress/* /var/www/centro.intranet
+
+
+
+Establece los permisos necesarios:
+
+sudo chown -R www-data:www-data /var/www/centro.intranet
+sudo chmod -R 755 /var/www/centro.intranet
+
+
+
+6. Configura la Base de Datos para WordPress
+Accede a MySQL:
+
+mysql -u root
+
+
+
+Crea una base de datos para WordPress:
+
+CREATE DATABASE wordpress;
+
+
+
+Crea un usuario y dale permisos a la base de datos:
+
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress_user'@'localhost' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+EXIT;
+7. Completa la Instalación de WordPress
+
+Abre tu navegador y accede a http://centro.intranet.
+Sigue los pasos de instalación de WordPress:
+Introduce el nombre de la base de datos (wordpress).
+El usuario de la base de datos (wordpress_user).
+La contraseña (password).
+Deja el campo "Servidor de la base de datos" como localhost.
 
 
