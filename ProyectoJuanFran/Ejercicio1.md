@@ -122,7 +122,7 @@ Añade una línea que apunte el dominio centro.intranet a tu máquina local (127
 
 127.0.0.1 centro.intranet
 
-
+![image](https://github.com/user-attachments/assets/6e52dc9e-ef94-4b8c-897e-90412f375649)
 
 Guarda los cambios (en Nano, usa Ctrl+O para guardar y Ctrl+X para salir).
 
@@ -148,7 +148,7 @@ Copiar código
     CustomLog ${APACHE_LOG_DIR}/centro_access.log combined
 </VirtualHost>
 
-
+![image](https://github.com/user-attachments/assets/71e636ee-6cee-487c-8e78-e80db27d2a0e)
 
 Guarda y cierra el archivo.
 
@@ -157,24 +157,25 @@ Habilita el nuevo sitio:
 
 sudo a2ensite centro.intranet.conf
 
-
+![image](https://github.com/user-attachments/assets/c8a8253a-c6ac-419c-9af0-4a14b1a294bc)
 
 Deshabilita el sitio por defecto si no lo necesitas:
 
 sudo a2dissite 000-default.conf
 
-
+![image](https://github.com/user-attachments/assets/b1d9c812-4545-40ee-9224-c367edb2c491)
 
 Habilita el módulo rewrite necesario para WordPress:
 
 sudo a2enmod rewrite
 
-
+![image](https://github.com/user-attachments/assets/3b04af56-9981-4aee-a37c-90089295714b)
 
 Recarga Apache para aplicar los cambios:
 
 sudo systemctl reload apache2
 
+![image](https://github.com/user-attachments/assets/da63afbb-dd89-4335-9d31-2b72f01ba1b0)
 
 
 4. Crea el Directorio para centro.intranet
@@ -182,40 +183,40 @@ Crea el directorio donde se alojará WordPress:
 
 sudo mkdir -p /var/www/centro.intranet
 
-
+![image](https://github.com/user-attachments/assets/7994fdc1-e445-4e3f-9f15-52f08ce29326)
 
 Establece los permisos para que tu usuario pueda administrar los archivos:
 
 sudo chown -R $USER:$USER /var/www/centro.intranet
 sudo chmod -R 755 /var/www/centro.intranet
 
-
+![image](https://github.com/user-attachments/assets/edd30823-5f9d-4018-bc65-cc9327487f25)
 
 5. Descarga e Instala WordPress
 Descarga WordPress:
 
 wget https://wordpress.org/latest.tar.gz
 
-
+![image](https://github.com/user-attachments/assets/6bad667b-718b-4796-9ec8-6c6d42ca9dac)
 
 Extrae el archivo descargado:
 
 tar -xvzf latest.tar.gz
 
-
+![image](https://github.com/user-attachments/assets/1f94c01c-8991-4869-9b70-e7ba2578fca1)
 
 Mueve los archivos de WordPress al directorio del dominio:
 
 mv wordpress/* /var/www/centro.intranet
 
-
+![image](https://github.com/user-attachments/assets/e0d3d908-8808-4bd0-b466-3c97177f8739)
 
 Establece los permisos necesarios:
 
 sudo chown -R www-data:www-data /var/www/centro.intranet
 sudo chmod -R 755 /var/www/centro.intranet
 
-
+![image](https://github.com/user-attachments/assets/54a38432-c662-4d89-8da3-76afacb21460)
 
 6. Configura la Base de Datos para WordPress
 Accede a MySQL:
