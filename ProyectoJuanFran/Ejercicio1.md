@@ -250,3 +250,207 @@ Deja el campo "Servidor de la base de datos" como localhost.
 
 ![image](https://github.com/user-attachments/assets/9fb13f93-cb93-4b47-8915-cbb7814a3d2d)
 
+-- 1. Crear y Desplegar una Aplicación Python con Apache y mod_wsgi
+1.1. Instalar mod_wsgi y Python:
+Asegúrate de que Python y el módulo wsgi estén instalados:
+
+sudo apt update
+sudo apt install apache2 libapache2-mod-wsgi-py3 python3 python3-pip
+
+![image](https://github.com/user-attachments/assets/bb88605c-b3c4-4726-af0d-7d10f82607d4)
+
+1.2. Crear una Aplicación Python:
+Crea una aplicación básica en /var/www/pythonapp:
+
+sudo mkdir -p /var/www/pythonapp
+sudo nano /var/www/pythonapp/app.py
+
+Añade el siguiente contenido:
+
+def application(environ, start_response):
+    status = '200 OK'
+    output = b"¡Hola! Esta es mi aplicación Python con WSGI."
+
+    response_headers = [('Content-type', 'text/plain'),
+                        ('Content-Length', str(len(output)))]
+    start_response(status, response_headers)
+
+    return [output]
+
+    
+![image](https://github.com/user-attachments/assets/8c1792d2-b09a-4f3e-ad32-84dbe478a5a9)    
+
+1.3. Configurar Apache para la Aplicación:
+Crea un archivo de configuración para el dominio:
+
+sudo nano /etc/apache2/sites-available/pythonapp.conf
+Añade esta configuración:
+
+<VirtualHost *:80>
+    ServerName python.centro.intranet
+    WSGIScriptAlias / /var/www/pythonapp/app.py
+
+    <Directory /var/www/pythonapp>
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/python_error.log
+    CustomLog ${APACHE_LOG_DIR}/python_access.log combined
+</VirtualHost>
+
+![image](https://github.com/user-attachments/assets/a3d6ba09-5d1d-48b5-bed0-20c8b2bceda0)
+
+Habilita el sitio y recarga Apache:
+
+sudo a2ensite pythonapp.conf
+sudo systemctl reload apache2
+
+![image](https://github.com/user-attachments/assets/b81ed3a6-89b5-4614-b889-bd54637e558e)
+
+1.4. Probar la Aplicación:
+Asegúrate de que python.centro.intranet está en el archivo /etc/hosts:
+
+127.0.0.1 python.centro.intranet
+
+![image](https://github.com/user-attachments/assets/7bb510e2-1ad5-4963-b8e7-2f2297195a80)
+
+Visita http://python.centro.intranet para comprobar que la aplicación funciona.
+
+2. Proteger el Acceso con Autenticación
+Crea un archivo .htpasswd con las credenciales:
+
+sudo apt install apache2-utils
+sudo htpasswd -c /etc/apache2/.htpasswd usuario
+
+![image](https://github.com/user-attachments/assets/797b5019-3fd0-48da-83c0-34bd27d5d870)
+
+Edita la configuración del sitio para habilitar autenticación:
+
+sudo nano /etc/apache2/sites-available/pythonapp.conf
+
+Añade estas líneas dentro del bloque <Directory>:
+
+AuthType Basic
+AuthName "Acceso Restringido"
+AuthUserFile /etc/apache2/.htpasswd
+Require valid-user
+
+![image](https://github.com/user-attachments/assets/b197201e-8c7a-4705-b28f-9b3a641965af)
+
+Recarga Apache:
+
+sudo systemctl reload apache2
+
+Visita http://python.centro.intranet y verifica que te solicita autenticación.
+
+3. Instalar y Configurar AWStats
+Instala AWStats:
+
+sudo apt install awstats
+
+![image](https://github.com/user-attachments/assets/bd0bb056-fad5-413d-b67f-0b527be67d00)
+
+Configura AWStats para Apache:
+
+Copia el archivo de configuración base:
+
+sudo cp /etc/awstats/awstats.conf /etc/awstats/awstats.python.centro.intranet.conf
+
+![image](https://github.com/user-attachments/assets/51faa553-ae9c-4efa-88cf-a30b6ee07a32)
+
+Edita el archivo:
+
+sudo nano /etc/awstats/awstats.python.centro.intranet.conf
+
+Cambia las siguientes líneas:
+
+LogFile="/var/log/apache2/access.log"
+SiteDomain="python.centro.intranet"
+HostAliases="localhost 127.0.0.1 python.centro.intranet"
+
+![image](https://github.com/user-attachments/assets/65dc0e96-c552-4a2d-b9fd-ed44b519dab6)
+
+Actualiza las estadísticas:
+sudo /usr/lib/cgi-bin/awstats.pl -config=python.centro.intranet -update
+
+![image](https://github.com/user-attachments/assets/a5ca44f5-6b4d-4fea-ac0f-b5c1da24986f)
+
+Habilita el acceso a AWStats desde Apache:
+
+sudo nano /etc/apache2/sites-available/pythonapp.conf
+Añade:
+
+Alias /awstats/icon /usr/share/awstats/icon/
+ScriptAlias /awstats/ /usr/lib/cgi-bin/
+
+![image](https://github.com/user-attachments/assets/6136425a-ec08-4f99-8980-c44580fc0b90)
+
+Recarga Apache:
+
+sudo systemctl reload apache2
+Visita http://python.centro.intranet/awstats/awstats.pl.
+
+4. Instalar y Configurar Nginx en el Puerto 8080
+4.1. Instalar Nginx:
+
+sudo apt install nginx
+
+![image](https://github.com/user-attachments/assets/60f09e7e-de81-4555-816c-37dab99669fb)
+
+4.2. Configurar Nginx para el Puerto 8080:
+Edita el archivo de configuración:
+
+sudo nano /etc/nginx/sites-available/servidor2
+
+Añade:
+
+server {
+    listen 8080;
+    server_name servidor2.centro.intranet;
+
+    root /var/www/servidor2;
+    index index.php index.html;
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+    }
+}
+
+![image](https://github.com/user-attachments/assets/58b7e738-8806-4906-85f9-38405836e8b3)
+
+Habilita el sitio y reinicia Nginx:
+
+sudo ln -s /etc/nginx/sites-available/servidor2 /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+
+
+5. Instalar y Configurar phpMyAdmin
+Instala PHP y phpMyAdmin:
+
+sudo apt install php php-fpm php-mysql phpmyadmin
+
+![image](https://github.com/user-attachments/assets/35b4fb63-c6c7-41d7-8ac4-d4283a92721a)
+
+Configura phpMyAdmin para Nginx:
+
+Edita el archivo de configuración de Nginx (servidor2):
+
+location /phpmyadmin {
+    root /usr/share/;
+    index index.php;
+    location ~ ^/phpmyadmin/(.+\.php)$ {
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+        include snippets/fastcgi-php.conf;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+    location ~* ^/phpmyadmin/(.+\.(jpg|jpeg|gif|css|js|ico|png|html|xml|txt))$ {
+        root /usr/share/;
+    }
+}
+Reinicia Nginx:
+
+sudo systemctl restart nginx
+
+Visita http://servidor2.centro.intranet:8080/phpmyadmin.
+
