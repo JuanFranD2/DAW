@@ -221,21 +221,22 @@ sudo chmod -R 755 /var/www/centro.intranet
 6. Configura la Base de Datos para WordPress
 Accede a MySQL:
 
-mysql -u root
-
-
+sudo mysql
 
 Crea una base de datos para WordPress:
 
 CREATE DATABASE wordpress;
 
-
+![image](https://github.com/user-attachments/assets/c06b4d72-eb8a-4904-8ca0-40f77840de8b)
 
 Crea un usuario y dale permisos a la base de datos:
 
 GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress_user'@'localhost' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
 EXIT;
+
+![image](https://github.com/user-attachments/assets/efefd034-afc0-4551-8f63-e2c51ee0e02c)
+
 7. Completa la Instalación de WordPress
 
 Abre tu navegador y accede a http://centro.intranet.
@@ -245,4 +246,7 @@ El usuario de la base de datos (wordpress_user).
 La contraseña (password).
 Deja el campo "Servidor de la base de datos" como localhost.
 
+![image](https://github.com/user-attachments/assets/94dd755a-0bfd-4274-b32b-103bdf49a6d9)
+
+![image](https://github.com/user-attachments/assets/9fb13f93-cb93-4b47-8915-cbb7814a3d2d)
 
