@@ -1,4 +1,4 @@
-- Primero no s aseguramos que tenemos la VPC perfectamente creada.
+- Primero nos aseguramos que tenemos la VPC perfectamente creada.
 
 ![image](https://github.com/user-attachments/assets/942d4fe1-b152-481f-a13d-138a0adca463)
 
@@ -84,6 +84,53 @@ sudo chmod -R 755 /var/www/html
 
 - Asignamos capa gratuita, nombre de labdd (bdwordpress), admin y contraseña ("12345678")
 
-- ![image](https://github.com/user-attachments/assets/4c62aeab-69bf-4994-939a-787f28c14c2d)
+![image](https://github.com/user-attachments/assets/4c62aeab-69bf-4994-939a-787f28c14c2d)
 
-- Configuramos 
+- Configuramos la conexión de EC-2 para blindar la conexión a la bdd a nuestra cuenta (privada)
+
+![image](https://github.com/user-attachments/assets/37e38eac-189b-4a7a-a849-f37dba787cf7)
+
+- BDD creada con éxito
+
+![image](https://github.com/user-attachments/assets/40b98b6d-9a86-4768-aa49-88438e685ae1)
+
+- Para conectarnos a ella copiamos el punto de enlace
+
+![image](https://github.com/user-attachments/assets/8c19f0ca-b03d-44bf-8fdd-75c5bbd1ed8c)
+
+- En el cmd entramos en la IP de la instancia y procedemos a asignar la bdd a mariadb mediante el punto de enlace
+
+![image](https://github.com/user-attachments/assets/c2525043-4bba-456f-9cee-ac384f0e71e1)
+
+- Creamos la bdd con el nombre "wordpress"
+
+![image](https://github.com/user-attachments/assets/361092fa-e70c-473c-8f7a-ea8c92f35b74)
+
+- Salimos del terminal, y procedemos a copiar el DNS IPv4 público de nuestra instancia para comenzar la instalación de wordpress
+
+![image](https://github.com/user-attachments/assets/b8170060-bdd0-453f-bbc8-956f59c23e33)
+
+- Comenzamos la instalación del wordpress
+
+![image](https://github.com/user-attachments/assets/0aadc020-7beb-406a-bdcd-88aa06eb2489)
+
+![image](https://github.com/user-attachments/assets/39f759d5-5f9f-46af-be47-0cee3f10567a)
+
+- Rellenamos los campos:
+- - Nombre de la base de datos: (wordpress)
+- - Nombre de usuario: el mismo que en la bdd RDS (admin)
+- - Contraseña: la mismo que en la bdd RDS (12345678)
+- - Servidor de la base de datos: copiamos el punto de enlace de la bdd e el RDS (bdwordpress.cye36yaoqezu.us-east-1.rds.amazonaws.com)
+- - Prefijo de tabla: wp_
+ 
+![image](https://github.com/user-attachments/assets/29398da3-40d5-4f35-a427-f140fb439443)
+
+![image](https://github.com/user-attachments/assets/cb06338a-a1e4-4022-b9c9-e3a06ac0da86)
+
+![image](https://github.com/user-attachments/assets/7494da0d-2b27-49b5-9086-5ab9a2602c9f)
+
+- Wordpress instalado correctamente
+
+![image](https://github.com/user-attachments/assets/c55a0b1a-9939-4c9e-81c0-feedc4d681c0)
+
+
