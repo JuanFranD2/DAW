@@ -6,21 +6,23 @@
 
 ![image](https://github.com/user-attachments/assets/49691a32-54c5-43d6-87c6-1c4835c974b5)
 
-- Modificamos el nombre del servidor, el tipo(Ubuntu).
+- Le asignamos "servidorwordpress" a la nueva instancia y seleccionamod en Inicio Rápido "Ubuntu"
 
-![image](https://github.com/user-attachments/assets/f72cd08f-5bca-4eb0-a5fe-3841ef0e3d3a)
+![image](https://github.com/user-attachments/assets/2ad6f102-3e86-41fc-8403-af7667c42581)
 
-- Creamos una clave para conectarnos remotamente a AWS.
+- En Par de claves creamos una nueva clave con el nombre de "servidorSSH"
 
-![image](https://github.com/user-attachments/assets/8e9975c8-a8e9-4aa5-a967-c0fd1c1455d6)
+![image](https://github.com/user-attachments/assets/cccba2c6-e099-4a87-a2c7-de15a94ce891)
 
-- Modificamos la configuración de red con los parámetros indicados.
+- En configuración de red asignamos el VPC "wizar" y su subred "wizard-subnet-public1-us-east-1a", le asignamos al nombre del grupo "seguridadwordpress"
 
-![image](https://github.com/user-attachments/assets/053b830c-3c4a-4394-9116-e22af200f680)
+![image](https://github.com/user-attachments/assets/aa9d5946-2656-49ea-ba61-4e8d1f3aa9e6)
 
-![image](https://github.com/user-attachments/assets/1269c9e6-79ae-4706-981d-745b5387fefa)
+- Creamos una nueva regla "HTTP"
 
-- Uso una instalacion de WordPress directamente por comandos en Detalles avanzados, Datos de usuario:
+![image](https://github.com/user-attachments/assets/1ed5ad8e-bb5d-4728-8469-7aa684d4c994)
+
+- En Detalles avanzados vamos a realizar todas las instalaciones necesarias para poder trabajar con wordpress en Ubuntu
 
 #!/bin/bash
 # Actualizar los paquetes del sistema:
@@ -39,15 +41,38 @@ sudo rm -rf wordpress latest.tar.gz
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 
-![image](https://github.com/user-attachments/assets/9df111d7-713c-45ac-b65d-401b9d95a240)
+- Comprobamos que se ha creado correctamente la instancia y se encuentra en ejecución
 
-- Como podemos comprobar, la instancia se ha creado correctamente:
+![image](https://github.com/user-attachments/assets/45da52b5-3f57-4ae6-b424-12f8c107d6ed)
 
-![image](https://github.com/user-attachments/assets/5f14c6ec-ddd1-4e54-9260-ccb5a76802ec)
+- Procedemos a conectarnos por nuestra consola a la instancia creada, para ello hacemos clic en la instancia y conectar
 
-![image](https://github.com/user-attachments/assets/2356b493-c9ad-44f7-a0e3-cb663781f7bf)
+![image](https://github.com/user-attachments/assets/f817a874-d2ab-41a1-82e7-ff8a56c17584)
 
-- Usamos la clave que nos da la instancia para conectarnosremotamente a la instancia.
+- En la pestaña "Cliente SSH", copiamos el código que viene en ejemplo: ssh -i "servidorSSH.pem" ubuntu@ec2-34-204-18-130.compute-1.amazonaws.com
 
-![image](https://github.com/user-attachments/assets/4c33da39-7f88-43ad-8dbf-3cd2f4a3adf5)
+![image](https://github.com/user-attachments/assets/d719fc9f-0ad5-43b5-a965-25fb25ec923d)
+
+- Ejecutamos nuestro cmd como administrador y añadimos la ruta de nuestro archivo clave descargada previamente
+
+![image](https://github.com/user-attachments/assets/df59e2e3-1653-41e3-8b3d-ee7add9a7a13)
+
+- Conseguimos entrar exitosamente
+
+![image](https://github.com/user-attachments/assets/a5ce7680-9d19-4c5d-b098-ca9e40eea098)
+
+- Comprobamos que todo se haya instalado correctamente
+
+-- Apache instalado correcctamente
+
+![image](https://github.com/user-attachments/assets/9f64f5ab-80b1-40c1-9b9c-4c440e4ce865)
+
+-- MariaDB instalado correctamente
+
+![image](https://github.com/user-attachments/assets/c47cb128-7da0-42be-ac4c-484b8def29be)
+
+-- Wordpress instalado correctamente
+
+![image](https://github.com/user-attachments/assets/464b70e3-5b43-46ff-8835-a6076eef82cc)
+
 
