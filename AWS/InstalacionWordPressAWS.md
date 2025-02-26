@@ -16,7 +16,31 @@
 
 ![image](https://github.com/user-attachments/assets/1269c9e6-79ae-4706-981d-745b5387fefa)
 
-- 
+- Uso una instalacion de WordPress directamente por comandos en Detalles avanzados, Datos de usuario:
 
+#!/bin/bash
+# Actualizar los paquetes del sistema:
+sudo apt update -y
+sudo apt upgrade -y
+# Instalar Apache, PHP y las extensiones necesarias:
+sudo apt install apache2 php php-mysql libapache2-mod-php php-cli php-curl php-gd php-mbstring php-xml php-xmlrpc php-zip -y
+# cliente mariadb
+sudo apt install mariadb-client-core -y
+# descargar e instalar WordPress
+cd /var/www/html
+sudo wget https://wordpress.org/latest.tar.gz
+sudo tar -xvzf latest.tar.gz
+sudo mv wordpress/*.
+sudo rm -rf wordpress latest.tar.gz
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+
+![image](https://github.com/user-attachments/assets/9df111d7-713c-45ac-b65d-401b9d95a240)
+
+- Como podemos comprobar, la instancia se ha creado correctamente:
+
+![image](https://github.com/user-attachments/assets/5f14c6ec-ddd1-4e54-9260-ccb5a76802ec)
+
+![image](https://github.com/user-attachments/assets/2356b493-c9ad-44f7-a0e3-cb663781f7bf)
 
 - 
