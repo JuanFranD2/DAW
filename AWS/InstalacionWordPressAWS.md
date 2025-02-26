@@ -75,4 +75,15 @@ sudo chmod -R 755 /var/www/html
 
 ![image](https://github.com/user-attachments/assets/464b70e3-5b43-46ff-8835-a6076eef82cc)
 
+- Procedemos a crear la base de datos en RDS
 
+![image](https://github.com/user-attachments/assets/bb13cfe8-b970-4365-8158-970ea9701da9)
+
+- La queremos de creación sencilla y de MariaDB
+![image](https://github.com/user-attachments/assets/ee5b11aa-7fd0-4696-a93a-f8a1e3bfa2ca)
+
+- Asignamos capa gratuita, nombre de labdd (bdwordpress), admin y contraseña ("12345678")
+
+- ![image](https://github.com/user-attachments/assets/4c62aeab-69bf-4994-939a-787f28c14c2d)
+
+- Configuramos 
