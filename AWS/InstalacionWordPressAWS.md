@@ -10,6 +10,10 @@
 
 ![image](https://github.com/user-attachments/assets/f72cd08f-5bca-4eb0-a5fe-3841ef0e3d3a)
 
+- Creamos una clave para conectarnos remotamente a AWS.
+
+![image](https://github.com/user-attachments/assets/8e9975c8-a8e9-4aa5-a967-c0fd1c1455d6)
+
 - Modificamos la configuración de red con los parámetros indicados.
 
 ![image](https://github.com/user-attachments/assets/053b830c-3c4a-4394-9116-e22af200f680)
@@ -43,4 +47,7 @@ sudo chmod -R 755 /var/www/html
 
 ![image](https://github.com/user-attachments/assets/2356b493-c9ad-44f7-a0e3-cb663781f7bf)
 
-- 
+- Usamos la clave que nos da la instancia para conectarnosremotamente a la instancia.
+
+![image](https://github.com/user-attachments/assets/4c33da39-7f88-43ad-8dbf-3cd2f4a3adf5)
+
