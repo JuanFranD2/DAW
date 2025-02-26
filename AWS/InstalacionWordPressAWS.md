@@ -133,4 +133,9 @@ sudo chmod -R 755 /var/www/html
 
 ![image](https://github.com/user-attachments/assets/c55a0b1a-9939-4c9e-81c0-feedc4d681c0)
 
+- Accedemos para comprobar que la instalación se ha realizado
+
+![image](https://github.com/user-attachments/assets/e3f9c3ed-a085-46f8-87cd-cf1a45bd9197)
+
+![image](https://github.com/user-attachments/assets/05ac90ce-fd9c-4ec9-b610-60e81e122384)
 
