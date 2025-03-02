@@ -139,3 +139,34 @@ sudo chmod -R 755 /var/www/html
 
 ![image](https://github.com/user-attachments/assets/05ac90ce-fd9c-4ec9-b610-60e81e122384)
 
+- Para conectar EFS a WP-content necesitamos crear un sistema de archivos EFS
+
+![image](https://github.com/user-attachments/assets/fa451a45-d5a8-450c-8135-4b0179fc057b)
+
+- Le otorgamos un nombre al EFS en mi caso "repositorioEFS" y lo ubicamos en el vpc-wizard
+
+![image](https://github.com/user-attachments/assets/f172151b-288d-4a85-b2c2-b65ca430c075)
+
+![image](https://github.com/user-attachments/assets/c4d681f6-05da-4a2a-a41f-a4e5831edea4)
+
+- Ahora nos vamos a EC2 y modificamos las reglas de entrada del grupo de seguridad para permitir el trafico NFS
+
+![image](https://github.com/user-attachments/assets/b41adef0-67cd-4641-a624-92f16e929fe2)
+
+![image](https://github.com/user-attachments/assets/bd4ba9df-6848-40b5-a29c-f9bd73150750)
+
+![image](https://github.com/user-attachments/assets/57c69a45-a2a6-4f50-8f1e-34c246f4c88c)
+
+- Hacemos una copia de seguridad para asegurarnos que podamos volver atrás en caso de falla
+
+![image](https://github.com/user-attachments/assets/18b15e08-bc0c-41c7-9d1a-7056bc0c3f74)
+
+- Creamos un nuevo directorio y le otorgamos los permisos necesarios para no tener problemas de permisos
+
+chown www-data:www-data /var/www/html/wp-content
+
+- Montamos el EFS en el directorio wp-content
+
+![image](https://github.com/user-attachments/assets/58ffedcf-6208-42e4-92b7-e60bbcd0372c)
+
+
