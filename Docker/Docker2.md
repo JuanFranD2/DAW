@@ -48,14 +48,14 @@ CMD ["python", "app.py"]
 ![image](https://github.com/user-attachments/assets/163a6475-ed6a-4cf2-b9d5-983771ce70d4)
 
 - Construye el contenedor En el directorio donde tienes el Dockerfile, ejecuta:
--- docker build -t tu-usuario/hola-mundo .
+-- docker build -t juanfran97/hola-mundo .
   
 ![image](https://github.com/user-attachments/assets/4ff06955-8e10-4722-9e3d-7e4d3030b7ec)
 
 Este comando construye la imagen con el nombre tu-usuario/hola-mundo basándose en el Dockerfile del directorio actual (.).
 
 - Lo ejecutamos para correr la imagen en un contenedor, utilizamos:
--- docker run -p 4000:80 tu-usuario/hola-mundo
+-- docker run -p 4000:80 juanfran97/hola-mundo
 
 ![image](https://github.com/user-attachments/assets/bd4726d4-3948-470a-8a11-1dea8a20aa56)
 
@@ -69,4 +69,5 @@ Creamos una cuenta en hub.docker.com visitando Docker Hub e ingresamos una cuent
 - Luego, sube tu imagen a Docker Hub:
 -- docker push juanfran97/hola-mundo
 
+![image](https://github.com/user-attachments/assets/d779bc90-5955-4697-b00d-70a38c45c295)
 
