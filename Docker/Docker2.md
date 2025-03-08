@@ -24,7 +24,7 @@ Práctica del primer artículo:
 
 Práctica del segundo artículo: Aplicaciones
 
-- Edita el fichero Dockerfile Crea un archivo Dockerfile en un directorio nuevo. Usamos un editor de texto para escribir lo siguiente en el archivo:
+- Editamos el fichero Dockerfile para ello creamos un archivo Dockerfile en un directorio nuevo. Usamos un editor de texto para escribir lo siguiente en el archivo:
 
 # Utiliza una imagen base oficial de Python
 FROM python:3.8-slim
@@ -45,19 +45,27 @@ EXPOSE 80
 ENV NAME World
 CMD ["python", "app.py"]
 
-- Construye el contenedor En el directorio donde tienes el Dockerfile, ejecuta:
+![image](https://github.com/user-attachments/assets/163a6475-ed6a-4cf2-b9d5-983771ce70d4)
 
+- Construye el contenedor En el directorio donde tienes el Dockerfile, ejecuta:
 -- docker build -t tu-usuario/hola-mundo .
+  
+![image](https://github.com/user-attachments/assets/4ff06955-8e10-4722-9e3d-7e4d3030b7ec)
+
 Este comando construye la imagen con el nombre tu-usuario/hola-mundo basándose en el Dockerfile del directorio actual (.).
 
 - Lo ejecutamos para correr la imagen en un contenedor, utilizamos:
 -- docker run -p 4000:80 tu-usuario/hola-mundo
 
+![image](https://github.com/user-attachments/assets/bd4726d4-3948-470a-8a11-1dea8a20aa56)
+
 Creamos una cuenta en hub.docker.com visitando Docker Hub e ingresamos una cuenta siguiendo las instrucciones del sitio.
 
 - Publica tu imagen Primero, inicia sesión en Docker Hub desde tu terminal:
+-- docker login
 
-docker login
+![image](https://github.com/user-attachments/assets/a6f18842-f356-47d7-8b3f-f50131459062)
+
 Luego, sube tu imagen a Docker Hub:
 
-docker push tu-usuario/hola-mundo
+docker push juanfran97/hola-mundo
