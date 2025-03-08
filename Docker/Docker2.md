@@ -66,6 +66,7 @@ Creamos una cuenta en hub.docker.com visitando Docker Hub e ingresamos una cuent
 
 ![image](https://github.com/user-attachments/assets/a6f18842-f356-47d7-8b3f-f50131459062)
 
-Luego, sube tu imagen a Docker Hub:
+- Luego, sube tu imagen a Docker Hub:
+-- docker push juanfran97/hola-mundo
 
-docker push juanfran97/hola-mundo
+
