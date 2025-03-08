@@ -26,19 +26,19 @@ Práctica del segundo artículo: Aplicaciones
 
 - Editamos el fichero Dockerfile para ello creamos un archivo Dockerfile en un directorio nuevo. Usamos un editor de texto para escribir lo siguiente en el archivo:
 
-# Utiliza una imagen base oficial de Python
+-- Utiliza una imagen base oficial de Python
 FROM python:3.8-slim
 
-# Establece el directorio de trabajo
+-- Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos necesarios para la aplicación
+-- Copia los archivos necesarios para la aplicación
 COPY . /app
 
-# Instala las dependencias de la aplicación
+-- Instala las dependencias de la aplicación
 RUN pip install --trusted-host pypi.python.org Flask
 
-# Expone el puerto donde se ejecutará la aplicación
+-- Expone el puerto donde se ejecutará la aplicación
 EXPOSE 80
 
 # Define el comando para iniciar la aplicación
