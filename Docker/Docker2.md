@@ -71,3 +71,4 @@ Creamos una cuenta en hub.docker.com visitando Docker Hub e ingresamos una cuent
 
 ![image](https://github.com/user-attachments/assets/d779bc90-5955-4697-b00d-70a38c45c295)
 
+![image](https://github.com/user-attachments/assets/28abe6a1-3b5c-4080-9e5d-4733b70e6cb2)
