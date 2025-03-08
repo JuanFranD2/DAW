@@ -64,6 +64,8 @@ $ docker volume create miweb
 miweb
 ```
 
+![image](https://github.com/user-attachments/assets/078cf330-0184-4a5e-9419-cc74f9442e5f)
+
 A continuación creamos un contenedor con el volumen asociado, usando `--mount`, y creamos un fichero `index.html`:
 
 ```bash
@@ -79,12 +81,16 @@ $ docker rm -f my-apache-app
 my-apache-app
 ```
 
+![image](https://github.com/user-attachments/assets/b07cd890-d826-457d-94d1-3f091d1639e3)
+
 Después de borrar el contenedor, volvemos a crear otro contenedor con el mismo volumen asociado:
 
 ```bash
 $ docker run -d --name my-apache-app -v miweb:/usr/local/apache2/htdocs -p 8080:80 httpd:2.4
 baa3511ca2227e30d90fa2b4b225e209889be4badff583ce58ac1feaa73d5d77
 ```
+
+![image](https://github.com/user-attachments/assets/4107824f-2df0-428d-8ec4-d9892217c6db)
 
 Y podemos comprobar que no no se ha perdido la información (el fichero `index.html`):
 
@@ -93,8 +99,12 @@ $ curl http://localhost:8080
 <h1>Hola</h1>
 ```
 
+![image](https://github.com/user-attachments/assets/d459bdac-da90-4190-8f16-ddf5ab760d8c)
+
 Algunas aclaraciones:
 
 * Al no indicar el volumen, se creará un nuevo volumen.
 * Si usamos el flag `-v` e indicamos un nombre, se creará un volumen docker nuevo.
 * Al usar tanto volúmenes como bind mount, el contenido de lo que tenemos sobreescribirá la carpeta destino en el sistema de ficheros del contenedor en caso de que exista.
+
+
