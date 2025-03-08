@@ -1,17 +1,29 @@
 Para realizar la práctica Docker 2, vamos a proceder con:
-- Ejecutamos la imagen "hello-world" Abre una terminal y ejecuta el siguiente comando para correr la imagen hello-world. Este comando descarga una imagen de prueba y la ejecuta en un contenedor, lo que te permite ver si Docker está correctamente instalado y funcionando.
+
+Práctica del primer artículo:
+
+- Ejecutamos la imagen "hello-world" Abrimos una terminal y ejecutamos el siguiente comando para correr la imagen hello-world. Este comando descarga una imagen de prueba y la ejecuta en un contenedor, lo que nos permite ver si Docker está correctamente instalado y funcionando.
 -- docker run hello-world
 
-- Muestra las imágenes Docker instaladas Para ver las imágenes que tienes instaladas en tu sistema, utiliza el comando:
+![image](https://github.com/user-attachments/assets/9fb8171a-5fb8-409f-9d8e-00a2c0016bed)
+
+- Mostramos las imágenes Docker instaladas para ver las imágenes que tenemos instaladas en el sistema, utilizamos el comando:
 -- docker images
 
-- Muestra los contenedores Docker Para ver los contenedores activos, utiliza:
+![image](https://github.com/user-attachments/assets/2f98c7cc-8fe8-43af-8035-20674c66fcba)
+
+- Mostramos los contenedores Docker para ver los contenedores activos, utilizamos:
 -- docker ps
+
+![image](https://github.com/user-attachments/assets/47384a46-d1fd-4b05-a903-6d9b1266f793)
 
 - Y para ver todos los contenedores, incluyendo los inactivos:
 -- docker ps -a
 
+![image](https://github.com/user-attachments/assets/40370035-3d8a-4302-87a9-a7c514c0b0fa)
+
 Práctica del segundo artículo: Aplicaciones
+
 - Edita el fichero Dockerfile Crea un archivo Dockerfile en un directorio nuevo. Usamos un editor de texto para escribir lo siguiente en el archivo:
 
 # Utiliza una imagen base oficial de Python
