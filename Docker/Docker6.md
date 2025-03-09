@@ -81,3 +81,108 @@ Cuando programamos una aplicación tenemos que tener en cuenta que va a ser impl
  }
  mysqli_close($conn);
  ?>
+En el fichero schema.sql encontramos las instrucciones sql necesarias para inicializar la base de datos.
+Configurar nuestra aplicación con variables de entorno
+En los casos en que necesitamos modificar algo en la aplicación o hacer algún proceso en el momento de crear el contenedor, lo que hacemos es crear un script en bash que meteremos en la imagen y que será la instrucción que indiquemos en el CMD. Este script en concreto hará las siguiente operaciones:
+
+Utilizando el fichero schema.sql (que también guardaremos en la imagen) inicializará la base de datos.
+Ejecutar el servidor web en segundo plano.
+En el directorio de trabajo encontramos:
+
+build: Será el contexto necesario para crear la imagen de la aplicación.
+El fichero docker-compose.yaml: Para crear el escenario.
+El contexto (directorio build)
+En el directorio de contexto tendremos tres ficheros:
+
+Fichero script.sh
+El fichero script.sh que se guardará en la imagen y se ejecutará con al iniciar el contenedor. Su contenido es el siguiente:
+
+#!/bin/bash
+while ! mysql -u ${DB_USER} -p${DB_PASS} -h ${DB_HOST}  -e ";" ; do
+	sleep 1
+done	
+mysql -u ${DB_USER} -p${DB_PASS} -h ${DB_HOST} ${DB_NAME} < /opt/schema.sql
+apache2ctl -D FOREGROUND
+Esperamos hasta que la base de datos esté disponible, inicializamos la base de datos con el fichero schema.sql y finalmente iniciamos el servidor web.
+
+Fichero schema.sql
+Son las instrucciones sql que nos permiten crear la tabla necesaria en la base de datos.
+
+Fichero Dockerfile
+El ficheroDockerfile sería el siguiente:
+
+# syntax=docker/dockerfile:1
+FROM php:7.4-apache
+RUN apt-get update && apt-get install -y mariadb-client
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+COPY app /var/www/html/
+EXPOSE 80
+ENV DB_USER user1
+ENV DB_PASS asdasd
+ENV DB_NAME usuarios
+ENV DB_HOST mariadb
+COPY script.sh /usr/local/bin/script.sh
+COPY schema.sql /opt
+RUN chmod +x /usr/local/bin/script.sh
+CMD /usr/local/bin/script.sh
+Algunas observaciones:
+
+Creamos la imagen desde una imagen PHP.
+Instalamos el cliente de mariadb que nos hará falta para inicializar la base de datos desde nuestro contenedor de la aplicación.
+Siguiendo la documentación de la imagen oficial de PHP instalamos el módulo PHP mysqli.
+Copiamos la aplicación en el servidor web.
+Creamos las variables de entorno y le damos valores por defecto, por si no se indican en la creación del contenedor.
+Copiamos los ficheros del script y del esquema de la base de datos a la imagen. Y le damos permisos de ejecución a script.sh.
+Finalmente indicamos con CMD el comando que se va a ejecutar al iniciar el contenedor. En este caso ejecutaremos el script.
+Creación de la imagen
+Ejecutamos dentro del directorio de contexto:
+
+![image](https://github.com/user-attachments/assets/508ebe72-bf77-4fbe-afbd-6321ef0382e5)
+
+$ docker build -t josedom24/aplicacion_php .
+
+![image](https://github.com/user-attachments/assets/d5d256fd-c43f-48df-97dd-3dc945a378e5)
+
+Despliegue de la aplicación
+Usaremos el fichero docker-compose.yaml:
+
+version: '3.1'
+services:
+  app:
+    container_name: contenedor_php
+    image: josedom24/aplicacion_php
+    restart: always
+    environment:
+      DB_HOST: servidor_mysql
+      DB_USER: user1
+      DB_PASS: asdasd
+      DB_NAME: usuarios
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+  db:
+    container_name: servidor_mysql
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: usuarios
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: asdasd
+      MYSQL_ROOT_PASSWORD: asdasd
+    volumes:
+      - mariadb_data:/var/lib/mysql
+volumes:
+    mariadb_data:
+Y ya podemos levantar el escenario, ejecutando:
+
+$ docker compose up -d
+
+![image](https://github.com/user-attachments/assets/d53296ab-5387-45d6-8f97-8381cc164f26)
+
+![image](https://github.com/user-attachments/assets/c33142df-9a42-4f5f-ad7b-916d8abb2f84)
+
+Y finalmente podemos acceder a la aplicación y comprobar que funciona.
+
+![image](https://github.com/user-attachments/assets/8cc6a5d4-7ccc-4734-b635-b81f3724beda)
+
