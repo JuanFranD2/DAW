@@ -114,3 +114,42 @@ NAME                    IMAGE                         COMMAND            SERVICE
 temperaturas-backend    iesgn/temperaturas_backend    "python3 app.py"   backend    20 seconds ago   Up 18 seconds   5000/tcp
 temperaturas-frontend   iesgn/temperaturas_frontend   "python3 app.py"   frontend   20 seconds ago   Up 17 seconds   0.0.0.0:8081->3000/tcp, :::8081->3000/tcp
 
+Ejemplo 3: Despliegue de tomcat + nginx
+En este ejemplo vamos a desplegar con Docker Compose la aplicación Java con Tomcat y nginx como proxy inverso que vimos en la sesión anterior en el Ejemplo 4: Despliegue de tomcat + nginx .
+
+Puedes encontrar el fichero docker-compose.yaml en en este directorio del repositorio.
+
+El fichero docker-compose.yaml sería:
+
+version: '3.1'
+services:
+  aplicacionjava:
+    container_name: tomcat
+    image: tomcat:9.0
+    restart: always
+    volumes:
+      - ./sample.war:/usr/local/tomcat/webapps/sample.war:ro
+  proxy:
+    container_name: nginx
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+Como podemos ver en el directorio donde tenemos guardado el docker-compose.yaml, tenemos los dos ficheros necesarios para la configuración: sample.war y default.conf.
+
+Creamos el escenario:
+
+$ docker compose up -d
+
+![image](https://github.com/user-attachments/assets/8a8f9966-46ac-4217-8a78-c47aaba5cc18)
+
+...
+Comprobar que los contenedores están funcionando:
+
+$ docker compose ps
+...
+
+![image](https://github.com/user-attachments/assets/7648548c-868a-4b8a-906a-c75248a47fd1)
+
+Y acceder al puerto 80 de nuestra IP para ver la aplicación.
