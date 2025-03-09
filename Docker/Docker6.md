@@ -35,19 +35,49 @@ juanfran/ejemplo1111     v1                  8c3275799063        1 minute ago   
 
 Y podemos crear un contenedor:
 $ docker run -d -p 80:3000 --name ejemplo2 juanfran/ejemplo1111:v1
+
+![image](https://github.com/user-attachments/assets/858b42e6-bee7-4478-bd68-1b905b173873)
+
 Y acceder con el navegador a nuestra página:
 
-ejemplo3
+![image](https://github.com/user-attachments/assets/3556400b-5b09-4a5c-9f1b-c8d394d9740a)
 
-Versión 2: Desde una imagen con python instalado
-En este caso el dichero Dockerfile podría ser de esta manera:
+Ejemplo 2: Construcción de imágenes configurables con variables de entorno
+En este último ejemplo vamos a construir una imagen de una aplicación PHP que necesita conectarse a una base de datos mariadb para guardar o leer información. Por lo tanto, vamos a construir la imagen para que podamos indicar variables de entorno para configurar las credenciales de acceso a la base de datos. Puedes encontrar los ficheros en este directorio del repositorio.
 
-# syntax=docker/dockerfile:1
-FROM python:3.12.1-bookworm
-WORKDIR /usr/share/app
-COPY app .
-RUN pip install --no-cache-dir -r requirements.txt
-EXPOSE 3000
-CMD python app.py
+Aplicación PHP
+Como ejemplo vamos a "dockerizar" una aplicación PHP simple que accede a una tabla de una base de datos. La aplicación la puedes encontrar en el directorio build/app/index.php.
 
+Algunas cosas que hay que tener en cuenta:
 
+Cuando programamos una aplicación tenemos que tener en cuenta que va a ser implantada usando Docker tenemos que hacer algunas modificaciones, por ejemplo en este caso, las credenciales para el acceso a la base de datos la leemos de variables de entorno (que posteriormente serán creadas en el contenedor):
+<?php
+ // Database host
+ $host = getenv('DB_HOST');
+ // Database user name
+ $user = getenv('DB_USER');
+ //Database user password
+ $pass = getenv('DB_PASS');
+ //Database name
+ $db = getenv('DB_NAME');
+ // check the MySQL connection status
+ $conn = new mysqli($host, $user, $pass,$db);
+ if ($conn->connect_error) {
+     die("Connection failed: " . $conn->connect_error);
+ } else {
+     $sql = 'SELECT * FROM users';
+     
+     if ($result = $conn->query($sql)) {
+         while ($data = $result->fetch_object()) {
+             $users[] = $data;
+         }
+     }
+     
+     foreach ($users as $user) {
+        echo "<br>";
+        echo $user->username . " " . $user->password;
+        echo "<br>";
+    }
+ }
+ mysqli_close($conn);
+ ?>
